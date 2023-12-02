@@ -1,0 +1,85 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+int validarPlaca(char *placa) {
+    int tamanho = strlen(placa);
+    if (tamanho != 8 && tamanho != 7) {
+        return 0;
+    }
+    for (int i = 0; i < tamanho; i++) {
+        if (i == 3 && placa[i] != '-') {
+            return 0;
+        } else if (i != 3 && !isalnum(placa[i])) {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+int validarDiaSemana(char *dia) {
+    char *diasSemana[] = {"SEGUNDA-FEIRA", "TERCA-FEIRA", "QUARTA-FEIRA", "QUINTA-FEIRA", "SEXTA-FEIRA", "SABADO", "DOMINGO"};
+    for (int i = 0; i < 7; i++) {
+        if (strcmp(dia, diasSemana[i]) == 0) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int terminacaoPlaca(char *placa) {
+    return placa[strlen(placa) - 1] - '0';
+}
+
+void verificarRodizio(char *placa, char *dia) {
+    int terminacao = terminacaoPlaca(placa);
+
+    if ((terminacao == 0 || terminacao == 1) && strcmp(dia, "SEGUNDA-FEIRA") == 0) {
+        printf("%s pode circular %s\n", placa, dia);
+    } else if ((terminacao == 2 || terminacao == 3) && strcmp(dia, "TERCA-FEIRA") == 0) {
+        printf("%s pode circular %s\n", placa, dia);
+    } else if ((terminacao == 4 || terminacao == 5) && strcmp(dia, "QUARTA-FEIRA") == 0) {
+        printf("%s pode circular %s\n", placa, dia);
+    } else if ((terminacao == 6 || terminacao == 7) && strcmp(dia, "QUINTA-FEIRA") == 0) {
+        printf("%s pode circular %s\n", placa, dia);
+    } else if ((terminacao == 8 || terminacao == 9) && strcmp(dia, "SEXTA-FEIRA") == 0) {
+        printf("%s pode circular %s\n", placa, dia);
+    } else if (strcmp(dia, "SABADO") == 0 || strcmp(dia, "DOMINGO") == 0) {
+        printf("Nao ha proibicao no fim de semana\n");
+    } else {
+        printf("Dia da semana invalido\n");
+    }
+}
+
+int main() {
+    char placa[10];
+    char dia[20];
+
+    if (scanf("%9s", placa) != 1) {
+        printf("Placa invalida\n");
+        return 0;
+    }
+
+    if (scanf("%19s", dia) != 1) {
+        printf("Dia da semana invalido\n");
+        return 0;
+    }
+
+    if (!validarPlaca(placa)) {
+        printf("Placa invalida\n");
+        return 0;
+    }
+
+    for (int i = 0; dia[i]; i++) {
+        dia[i] = toupper(dia[i]);
+    }
+
+    if (!validarDiaSemana(dia)) {
+        printf("Dia da semana invalido\n");
+        return 0;
+    }
+
+    verificarRodizio(placa, dia);
+
+    return 0;
+}
